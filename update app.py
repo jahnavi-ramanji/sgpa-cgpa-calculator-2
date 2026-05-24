@@ -7,7 +7,24 @@ num_semesters = st.number_input(
     "Enter number of semesters",
     min_value=1,
     step=1
+    
 )
+sgpa_list = []
+
+# Loop through semesters
+for sem in range(int(num_semesters)):
+
+    st.header(f"Semester {sem + 1}")
+
+    num_subjects = st.number_input(
+        f"Enter number of subjects in Semester {sem + 1}",
+        min_value=1,
+        step=1,
+        key=f"sub{sem}"
+    )
+
+    total_credits = 0
+    total_credit_points = 0
 
 
 
