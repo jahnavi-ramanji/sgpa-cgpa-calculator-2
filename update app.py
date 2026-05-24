@@ -3,6 +3,13 @@ import streamlit as st
 st.set_page_config(page_title="SGPA & CGPA Calculator")
 
 st.title("🎓 SGPA & CGPA Calculator")
+num_semesters = st.number_input(
+    "Enter number of semesters",
+    min_value=1,
+    step=1
+)
+
+
 
 # Store SGPA values
 if "sgpa_list" not in st.session_state:
