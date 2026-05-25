@@ -11,24 +11,7 @@ st.set_page_config(
     layout="centered"
 )
 
-# ---------------------------------------------------
-# CUSTOM CSS
-# ---------------------------------------------------
 
-st.markdown("""
-<style>
-
-.stApp {
-    background-color: #0E1117;
-    color: white;
-}
-
-h1, h2, h3, h4 {
-    color: #FFFFFF;
-}
-
-</style>
-""", unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # LOGO AND TITLE
