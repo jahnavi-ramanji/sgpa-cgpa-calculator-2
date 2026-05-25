@@ -204,7 +204,7 @@ if page == "Dashboard":
     st.success("Welcome back to the BMSCE Academic Management System")
 
     
-    )
+    
 # ---------------------------------------------------
 # STUDENT DETAILS PAGE
 # ---------------------------------------------------
