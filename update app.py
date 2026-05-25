@@ -223,7 +223,7 @@ if page == "Dashboard":
     st.subheader("Welcome to BMSCE Academic Portal")
 
     st.success(
-        "Welcome back to the BMSCE Academic Management System"
+        "Welcome to the BMSCE Academic Management System"
     )
     
 # ---------------------------------------------------
