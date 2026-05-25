@@ -30,48 +30,60 @@ st.set_page_config(
 # ---------------------------------------------------
 # CUSTOM CSS
 # ---------------------------------------------------
-
 st.markdown("""
 <style>
 
 /* Main Background */
 .stApp {
-    background-color: #0b1f3a;
-    color: white;
+    background: #081b33;
+    color: #ffffff;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 /* Sidebar */
 section[data-testid="stSidebar"] {
-    background-color: #13294B;
+    background-color: #10284d;
+    border-right: 1px solid #1e3f6e;
 }
 
 /* Sidebar Text */
 section[data-testid="stSidebar"] * {
-    color: white;
+    color: #ffffff;
+    font-size: 16px;
 }
 
-/* Titles */
+/* Main Headings */
 h1, h2, h3 {
-    color: #00C6FF;
-    font-family: Arial;
+    color: #ffffff;
+    font-weight: 700;
 }
 
-/* Input Boxes */
+/* Labels */
+label {
+    color: #d6e4ff !important;
+    font-weight: 500;
+}
+
+/* Text Input */
 .stTextInput input {
-    background-color: #1f3b64;
+    background-color: #16345f;
     color: white;
     border-radius: 10px;
-    border: 1px solid #00C6FF;
+    border: 1px solid #355d91;
+    padding: 10px;
 }
 
+/* Number Input */
 .stNumberInput input {
-    background-color: #1f3b64;
+    background-color: #16345f;
     color: white;
     border-radius: 10px;
+    border: 1px solid #355d91;
 }
 
-.stSelectbox div {
-    background-color: #1f3b64;
+/* Select Box */
+.stSelectbox div[data-baseweb="select"] {
+    background-color: #16345f;
     color: white;
     border-radius: 10px;
 }
@@ -79,31 +91,45 @@ h1, h2, h3 {
 /* Buttons */
 .stButton > button {
     width: 100%;
-    background-color: #00C6FF;
-    color: black;
+    background: #2d6cdf;
+    color: white;
     border-radius: 10px;
     height: 45px;
-    font-size: 16px;
-    font-weight: bold;
     border: none;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.stButton > button:hover {
+    background: #4b84ea;
+    color: white;
 }
 
 /* Metric Cards */
 [data-testid="metric-container"] {
-    background-color: #1f3b64;
+    background-color: #122b4f;
+    border: 1px solid #244b7a;
+    padding: 20px;
     border-radius: 15px;
-    padding: 15px;
-    border: 1px solid #00C6FF;
 }
 
-/* Tables */
+/* Dataframe */
 [data-testid="stDataFrame"] {
-    background-color: white;
     border-radius: 10px;
+    overflow: hidden;
 }
 
-/* Footer */
+/* Radio Buttons */
+.stRadio label {
+    color: white !important;
+}
+
+/* Remove Streamlit Footer */
 footer {
+    visibility: hidden;
+}
+
+header {
     visibility: hidden;
 }
 
