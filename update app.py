@@ -32,6 +32,10 @@ st.set_page_config(
 # ---------------------------------------------------
 st.markdown("""
 <style>
+/* Hide Sidebar Collapse Button */
+[data-testid="collapsedControl"] {
+    display: none;
+}
 
 /* Main App */
 .stApp {
