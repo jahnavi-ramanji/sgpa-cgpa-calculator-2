@@ -8,36 +8,58 @@ import pandas as pd
 st.set_page_config(
     page_title="BMSCE SGPA & CGPA Analytics Portal",
     page_icon="🎓",
-    layout="centered"
+    layout="wide"
 )
+
 # ---------------------------------------------------
-# BMSCE THEME
+# BMSCE WEBSITE STYLE
 # ---------------------------------------------------
 
 st.markdown("""
 <style>
 
+/* Main Background */
 .stApp {
-    background-color: #F5F9FF;
+    background-color: #F4F8FC;
 }
 
-h1 {
-    color: #003366;
-    text-align: center;
+/* Top Header */
+.main-header {
+    background-color: #003366;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
 }
 
-h2, h3 {
-    color: #004C99;
+/* Title */
+.main-title {
+    color: white;
+    font-size: 38px;
+    font-weight: bold;
 }
 
+/* Subtitle */
+.sub-title {
+    color: #D6E6F2;
+    font-size: 18px;
+}
+
+/* Section Boxes */
+.block-container {
+    padding-top: 1rem;
+}
+
+/* Buttons */
 .stButton>button {
     background-color: #0056B3;
     color: white;
-    border-radius: 10px;
+    border-radius: 8px;
     height: 45px;
-    width: 100%;
-    font-size: 16px;
     border: none;
+    font-size: 16px;
 }
 
 .stButton>button:hover {
@@ -45,36 +67,52 @@ h2, h3 {
     color: white;
 }
 
-.stTextInput>div>div>input {
-    border-radius: 8px;
-}
-
+/* Input Fields */
+.stTextInput>div>div>input,
 .stNumberInput>div>div>input {
     border-radius: 8px;
 }
 
+/* Select Boxes */
 .stSelectbox>div>div {
     border-radius: 8px;
+}
+
+/* Metric Cards */
+[data-testid="metric-container"] {
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
 }
 
 </style>
 """, unsafe_allow_html=True)
 
-
 # ---------------------------------------------------
-# LOGO AND TITLE
+# HEADER SECTION
 # ---------------------------------------------------
 
-st.image(
-    "https://www.bmsce.ac.in/assets/img/bmsce-logo.png",
-    width=140
-)
+col1, col2 = st.columns([1, 6])
 
-st.title("🎓 BMSCE SGPA & CGPA Analytics Portal")
+with col1:
+    st.image(
+        "https://www.bmsce.ac.in/assets/img/bmsce-logo.png",
+        width=110
+    )
 
-st.subheader(
-    "Student Academic Performance Management System"
-)
+with col2:
+    st.markdown("""
+    <div style='padding-top:10px'>
+        <div class='main-title'>
+            BMSCE SGPA & CGPA Analytics Portal
+        </div>
+
+        <div class='sub-title'>
+            Student Academic Performance Management System
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.markdown("---")
 
