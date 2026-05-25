@@ -33,109 +33,93 @@ st.set_page_config(
 st.markdown("""
 <style>
 
-/* Main Background */
+/* Main App */
 .stApp {
-    background: #081b33;
-    color: #ffffff;
+    background-color: #f1f5f9;
+    color: #111827;
     font-family: 'Segoe UI', sans-serif;
 }
 
 /* Sidebar */
 section[data-testid="stSidebar"] {
-    background-color: #10284d;
-    border-right: 1px solid #1e3f6e;
+    background-color: #0f172a;
+    border-right: 2px solid #1e293b;
 }
 
 /* Sidebar Text */
 section[data-testid="stSidebar"] * {
-    color: #ffffff;
-    font-size: 16px;
+    color: white !important;
 }
 
-/* Main Headings */
+/* Titles */
 h1, h2, h3 {
-    color: #ffffff;
+    color: #0f172a;
     font-weight: 700;
 }
 
 /* Labels */
 label {
-    color: #d6e4ff !important;
-    font-weight: 500;
+    color: #1e293b !important;
+    font-weight: 600;
 }
 
-/* Text Input */
-.stTextInput input {
-    background-color: #16345f;
-    color: white;
-    border-radius: 10px;
-    border: 1px solid #355d91;
-    padding: 10px;
-}
-
-/* Number Input */
+/* Inputs */
+.stTextInput input,
 .stNumberInput input {
-    background-color: #16345f;
-    color: white;
+    background-color: white;
+    color: black;
     border-radius: 10px;
-    border: 1px solid #355d91;
+    border: 1px solid #cbd5e1;
 }
 
-/* Select Box */
-.stSelectbox div[data-baseweb="select"] {
-    background-color: #16345f;
-    color: white;
+/* Selectbox */
+.stSelectbox div[data-baseweb=\"select\"] {
+    background-color: white;
     border-radius: 10px;
+    color: black;
 }
 
 /* Buttons */
 .stButton > button {
-    width: 100%;
-    background: #2d6cdf;
+    background-color: #2563eb;
     color: white;
     border-radius: 10px;
-    height: 45px;
     border: none;
+    height: 45px;
     font-size: 16px;
     font-weight: 600;
 }
 
 .stButton > button:hover {
-    background: #4b84ea;
-    color: white;
+    background-color: #1d4ed8;
 }
 
 /* Metric Cards */
-[data-testid="metric-container"] {
-    background-color: #122b4f;
-    border: 1px solid #244b7a;
+[data-testid=\"metric-container\"] {
+    background: white;
+    border-radius: 16px;
     padding: 20px;
-    border-radius: 15px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.05);
 }
 
-/* Dataframe */
-[data-testid="stDataFrame"] {
-    border-radius: 10px;
-    overflow: hidden;
+/* Metric Text */
+[data-testid=\"metric-container\"] * {
+    color: #111827 !important;
 }
 
-/* Radio Buttons */
-.stRadio label {
-    color: white !important;
+/* Info Box */
+.stAlert {
+    border-radius: 12px;
 }
 
-/* Remove Streamlit Footer */
-footer {
-    visibility: hidden;
-}
-
-header {
+/* Remove Streamlit Header/Footer */
+header, footer {
     visibility: hidden;
 }
 
 </style>
 """, unsafe_allow_html=True)
-
 # ---------------------------------------------------
 # HEADER
 # ---------------------------------------------------
@@ -217,11 +201,9 @@ if page == "Dashboard":
 
     st.subheader("Welcome to BMSCE Academic Portal")
 
-    st.info("Use the sidebar to navigate through academic services.")
+    st.success("Welcome back to the BMSCE Academic Management System")
 
-    st.image(
-        "https://images.unsplash.com/photo-1523050854058-8df90110c9f1",
-        use_container_width=True
+    
     )
 # ---------------------------------------------------
 # STUDENT DETAILS PAGE
