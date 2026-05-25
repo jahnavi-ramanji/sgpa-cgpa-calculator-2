@@ -116,7 +116,7 @@ label {
 }
 
 /* Remove Streamlit Header/Footer */
-header, footer {
+ footer {
     visibility: hidden;
 }
 
