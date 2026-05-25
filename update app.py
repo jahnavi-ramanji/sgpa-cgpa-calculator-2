@@ -1,453 +1,128 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 
-# ---------------------------------------------------
-# PAGE CONFIG
-# ---------------------------------------------------
+# --- PAGE SETUP ---
+st.set_page_config(page_title="BMSCE Result Portal", page_icon="🎓", layout="wide")
 
-st.set_page_config(
-    page_title="BMSCE SGPA & CGPA Analytics Portal",
-    page_icon="🎓",
-    layout="wide"
-)
-
-# ---------------------------------------------------
-# CUSTOM CSS
-# ---------------------------------------------------
-
-st.markdown("""
-<style>
-
-.stApp {
-    background-color: #F4F8FC;
+# --- GRADE TO POINT DICTIONARY (Standard 10-Point Scale) ---
+grade_points = {
+    "O (Outstanding)": 10,
+    "A+ (Excellent)": 9,
+    "A (Very Good)": 8,
+    "B+ (Good)": 7,
+    "B (Above Average)": 6,
+    "C (Average)": 5,
+    "P (Pass)": 4,
+    "F (Fail)": 0
 }
 
-/* Welcome Box */
-.welcome-box {
-    background-color: #003366;
-    padding: 40px;
-    border-radius: 15px;
-    text-align: center;
-    color: white;
-}
+# --- SIDEBAR NAVIGATION ---
+st.sidebar.image("https://upload.wikimedia.org/wikipedia/en/thumb/f/f8/BMS_College_of_Engineering_logo.svg/1200px-BMS_College_of_Engineering_logo.svg.png", width=150)
+st.sidebar.title("Student Portal")
+page = st.sidebar.radio("Navigate to:", ["SGPA & Analytics", "Target CGPA Analyzer (What-If)"])
 
-/* Main Title */
-.main-title {
-    font-size: 42px;
-    font-weight: bold;
-}
+st.sidebar.markdown("---")
+st.sidebar.info("Developed by AI/ML Dept")
 
-/* Subtitle */
-.sub-title {
-    font-size: 20px;
-    color: #DCE6F2;
-}
+# --- PAGE 1: SGPA & ANALYTICS ---
+if page == "SGPA & Analytics":
+    st.title("🎓 Semester Result & Analytics")
+    st.write("Enter your marks to generate your SGPA and visualize your performance.")
 
-/* Buttons */
-.stButton > button {
-    background-color: #0056B3;
-    color: white;
-    border-radius: 10px;
-    height: 50px;
-    width: 100%;
-    font-size: 18px;
-    border: none;
-}
-
-.stButton > button:hover {
-    background-color: #003D80;
-    color: white;
-}
-
-/* Metric Cards */
-[data-testid="metric-container"] {
-    background-color: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-}
-
-</style>
-""", unsafe_allow_html=True)
-
-# ---------------------------------------------------
-# SESSION STATE
-# ---------------------------------------------------
-
-if "page" not in st.session_state:
-    st.session_state.page = "home"
-
-if "sgpa_list" not in st.session_state:
-    st.session_state.sgpa_list = []
-
-# ---------------------------------------------------
-# HOME PAGE
-# ---------------------------------------------------
-
-if st.session_state.page == "home":
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
-
-    st.image(
-        "https://www.bmsce.ac.in/assets/img/bmsce-logo.png",
-        width=180
-    )
-
-    st.markdown("""
-    <div class="welcome-box">
-
-        <div class="main-title">
-            WELCOME TO
-        </div>
-
-        <br>
-
-        <div class="main-title">
-            BMSCE SGPA & CGPA
-            ANALYTICS PORTAL
-        </div>
-
-        <br>
-
-        <div class="sub-title">
-            Student Academic Performance
-            Management System
-        </div>
-
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    if st.button("🚀 START PORTAL"):
-
-        st.session_state.page = "portal"
-
-        st.rerun()
-
-# ---------------------------------------------------
-# PORTAL PAGE
-# ---------------------------------------------------
-
-elif st.session_state.page == "portal":
-
-    # HEADER
-
-    col1, col2 = st.columns([1, 6])
-
+    # Student Info
+    col1, col2 = st.columns(2)
     with col1:
-        st.image(
-            "https://www.bmsce.ac.in/assets/img/bmsce-logo.png",
-            width=100
-        )
-
+        student_name = st.text_input("Student Name")
     with col2:
-        st.title(
-            "🎓 BMSCE SGPA & CGPA Analytics Portal"
+        usn = st.text_input("USN (e.g., 1BM22AI001)")
+
+    st.markdown("### Subject Details")
+    num_subjects = st.number_input("Number of Subjects", min_value=1, max_value=10, value=5, step=1)
+
+    # Create dynamic inputs for subjects
+    subjects = []
+    credits = []
+    grades = []
+
+    # UI for entering subject data
+    for i in range(int(num_subjects)):
+        c1, c2, c3 = st.columns([2, 1, 1])
+        with c1:
+            subj = st.text_input(f"Subject {i+1} Name", key=f"sub_{i}")
+        with c2:
+            cred = st.number_input(f"Credits", min_value=1, max_value=5, value=3, key=f"cred_{i}")
+        with c3:
+            grade = st.selectbox(f"Grade", options=list(grade_points.keys()), key=f"grade_{i}")
+        
+        subjects.append(subj if subj else f"Subject {i+1}")
+        credits.append(cred)
+        grades.append(grade)
+
+    if st.button("Generate Result & Analytics", type="primary"):
+        # Calculations
+        total_credits = sum(credits)
+        earned_points = sum([credits[i] * grade_points[grades[i]] for i in range(len(credits))])
+        
+        sgpa = earned_points / total_credits if total_credits > 0 else 0
+
+        st.markdown("---")
+        st.header(f"Result for {student_name} ({usn})")
+        
+        # Display SGPA in a prominent metric box
+        st.metric(label="Calculated SGPA", value=f"{sgpa:.2f}")
+
+        # Visual Analytics
+        st.subheader("Performance Analytics")
+        
+        # Create a dataframe for the charts
+        df = pd.DataFrame({
+            "Subject": subjects,
+            "Credits": credits,
+            "Grade Points": [grade_points[g] for g in grades]
+        })
+
+        # Display Bar Chart
+        st.bar_chart(data=df, x="Subject", y="Grade Points", use_container_width=True)
+
+        # Downloadable "Invoice" (CSV format for Streamlit simplicity)
+        csv = df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="Download Result Report (CSV)",
+            data=csv,
+            file_name=f"{usn}_result.csv",
+            mime="text/csv",
         )
 
-        st.subheader(
-            "Student Academic Performance Management System"
-        )
-
-    st.markdown("---")
-
-    # ---------------------------------------------------
-    # STUDENT DETAILS
-    # ---------------------------------------------------
-
-    st.header("👨‍🎓 Student Details")
-
-    name = st.text_input("Enter Student Name")
-
-    usn = st.text_input("Enter USN")
-
-    branch = st.selectbox(
-        "Select Branch",
-        [
-            "Aerospace Engineering",
-            "CSE",
-            "ISE",
-            "ECE",
-            "EEE",
-            "Mechanical",
-            "Civil",
-            "AIML"
-        ]
-    )
-
-    section = st.selectbox(
-        "Select Section",
-        ["A", "B", "C"]
-    )
-
-    academic_year = st.selectbox(
-        "Academic Year",
-        ["2025-26", "2026-27"]
-    )
-
-    photo = st.file_uploader(
-        "Upload Student Photo",
-        type=["png", "jpg", "jpeg"]
-    )
-
-    st.markdown("---")
-
-    # ---------------------------------------------------
-    # SEMESTER DETAILS
-    # ---------------------------------------------------
-
-    num_semesters = st.number_input(
-        "Enter Number of Semesters",
-        min_value=1,
-        step=1
-    )
-
-    grade_dict = {
-        "O": 10,
-        "A+": 9,
-        "A": 8,
-        "B+": 7,
-        "B": 6,
-        "C": 5,
-        "F": 0
-    }
-
-    current_sgpas = []
-
-    subject_table = []
-
-    # ---------------------------------------------------
-    # SEMESTER LOOP
-    # ---------------------------------------------------
-
-    for sem in range(int(num_semesters)):
-
-        st.header(f"📘 Semester {sem + 1}")
-
-        num_subjects = st.number_input(
-            f"Enter Number of Subjects in Semester {sem + 1}",
-            min_value=1,
-            step=1,
-            key=f"subjects{sem}"
-        )
-
-        total_credits = 0
-        total_credit_points = 0
-
-        # SUBJECT LOOP
-
-        for i in range(int(num_subjects)):
-
-            st.subheader(f"Subject {i + 1}")
-
-            subject_name = st.text_input(
-                "Enter Subject Name",
-                key=f"subject{sem}{i}"
-            )
-
-            credits = st.number_input(
-                "Enter Credits",
-                min_value=0.0,
-                step=0.5,
-                key=f"credits{sem}{i}"
-            )
-
-            grade_letter = st.selectbox(
-                "Select Grade",
-                list(grade_dict.keys()),
-                key=f"grade{sem}{i}"
-            )
-
-            grade_point = grade_dict[grade_letter]
-
-            total_credits += credits
-
-            total_credit_points += (
-                credits * grade_point
-            )
-
-            subject_table.append({
-
-                "Semester": sem + 1,
-                "Subject": subject_name,
-                "Credits": credits,
-                "Grade": grade_letter,
-                "Grade Point": grade_point
-
-            })
-
-        # SGPA
-
-        if total_credits > 0:
-
-            sgpa = (
-                total_credit_points
-                / total_credits
-            )
-
-            current_sgpas.append(sgpa)
-
-            st.success(
-                f"SGPA of Semester {sem + 1}: {round(sgpa, 2)}"
-            )
-
-    # ---------------------------------------------------
-    # GENERATE RESULT
-    # ---------------------------------------------------
-
-    if st.button("🎯 GENERATE RESULT"):
-
-        st.session_state.sgpa_list = current_sgpas.copy()
-
-        if len(st.session_state.sgpa_list) > 0:
-
-            cgpa = (
-                sum(st.session_state.sgpa_list)
-                / len(st.session_state.sgpa_list)
-            )
-
-            percentage = (
-                (cgpa - 0.75) * 10
-            )
-
-            st.markdown("---")
-
-            st.header("📊 RESULT DASHBOARD")
-
-            # PHOTO
-
-            if photo is not None:
-                st.image(photo, width=150)
-
-            # STUDENT DETAILS
-
-            st.subheader("👨‍🎓 Student Information")
-
-            st.write(f"Name: {name}")
-            st.write(f"USN: {usn}")
-            st.write(f"Branch: {branch}")
-            st.write(f"Section: {section}")
-            st.write(f"Academic Year: {academic_year}")
-
-            st.markdown("---")
-
-            # METRICS
-
-            col1, col2 = st.columns(2)
-
-            col1.metric(
-                "CGPA",
-                round(cgpa, 2)
-            )
-
-            col2.metric(
-                "Percentage",
-                f"{round(percentage,2)}%"
-            )
-
-            st.markdown("---")
-
-            # PERFORMANCE
-
-            st.subheader("📈 Performance Analysis")
-
-            if cgpa >= 9:
-
-                st.success(
-                    "🌟 Outstanding Performance"
-                )
-
-            elif cgpa >= 8:
-
-                st.success(
-                    "🎯 Excellent Performance"
-                )
-
-            elif cgpa >= 7:
-
-                st.info(
-                    "👍 Good Performance"
-                )
-
-            elif cgpa >= 6:
-
-                st.warning(
-                    "🙂 Average Performance"
-                )
-
-            else:
-
-                st.error(
-                    "📚 Needs Improvement"
-                )
-
-            st.markdown("---")
-
-            # SGPA TABLE
-
-            st.subheader(
-                "📚 Semester-wise SGPA"
-            )
-
-            sgpa_df = pd.DataFrame({
-
-                "Semester": range(
-                    1,
-                    len(st.session_state.sgpa_list)+1
-                ),
-
-                "SGPA": st.session_state.sgpa_list
-
-            })
-
-            st.table(sgpa_df)
-
-            # SUBJECT TABLE
-
-            st.subheader(
-                "📖 Subject Details"
-            )
-
-            st.table(
-                pd.DataFrame(subject_table)
-            )
-
-            st.markdown("---")
-
-            # GRAPH
-
-            st.subheader(
-                "📉 SGPA Trend Graph"
-            )
-
-            st.line_chart(
-                sgpa_df.set_index("Semester")
-            )
-
-            st.markdown("---")
-
-            # DOWNLOAD BUTTON
-
-            st.download_button(
-                label="📥 Download Result",
-                data=sgpa_df.to_csv(index=False),
-                file_name="BMSCE_Result.csv",
-                mime="text/csv"
-            )
-
-            # START OVER
-
-            if st.button("🔄 START OVER"):
-
-                st.session_state.page = "home"
-
-                st.session_state.sgpa_list = []
-
-                st.rerun()
-
-    st.markdown("---")
-
-    st.caption(
-        "Developed by Jahnavi R | Department of Aerospace Engineering"
-    )
+# --- PAGE 2: TARGET CGPA ANALYZER ---
+elif page == "Target CGPA Analyzer (What-If)":
+    st.title("🎯 The 'What-If' Target Analyzer")
+    st.write("Plan your future semesters to hit your graduation goals.")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        current_cgpa = st.number_input("Current CGPA", min_value=0.0, max_value=10.0, value=7.5, step=0.01)
+        credits_completed = st.number_input("Total Credits Completed So Far", min_value=1, max_value=200, value=40)
+    
+    with col2:
+        target_cgpa = st.number_input("Target CGPA for Graduation", min_value=0.0, max_value=10.0, value=8.5, step=0.01)
+        credits_remaining = st.number_input("Total Credits Remaining in Degree", min_value=1, max_value=160, value=120)
+
+    if st.button("Analyze Target", type="primary"):
+        # Math for What-If
+        current_total_points = current_cgpa * credits_completed
+        required_total_points = target_cgpa * (credits_completed + credits_remaining)
+        points_needed = required_total_points - current_total_points
+        
+        required_sgpa_average = points_needed / credits_remaining
+
+        st.markdown("---")
+        if required_sgpa_average > 10:
+            st.error(f"**Target Impossible:** You would need an average SGPA of {required_sgpa_average:.2f} in your remaining semesters, which is above 10.0. Consider revising your target.")
+        elif required_sgpa_average < 0:
+            st.success(f"**Target Secured:** You have already secured enough points to maintain this target even if you fail everything (though we don't recommend that!).")
+        else:
+            st.success(f"**Target Achievable:** You need to maintain an average SGPA of **{required_sgpa_average:.2f}** over your remaining {credits_remaining} credits to graduate with a {target_cgpa} CGPA.")
+            
+            # Progress bar visualization
+            st.progress(required_sgpa_average / 10.0)
