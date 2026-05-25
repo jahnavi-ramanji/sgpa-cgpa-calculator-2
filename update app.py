@@ -398,16 +398,24 @@ elif page == "Target Analyzer":
         st.success(
             f"Required SGPA in Remaining Semesters: {round(required_sgpa,2)}"
         )
-
         if required_sgpa <= 8:
-            st.success("Target is Easily Achievable ✅")
+
+                st.success(
+                        "Excellent! Your target is comfortably achievable with consistent effort ✅"
+                        )
 
         elif required_sgpa <= 9:
-            st.warning("Need Consistent Hard Work ⚡")
+
+                st.info(
+                        "You're on a strong path. Stay consistent and focused each semester ⚡"
+                        )
 
         else:
-            st.error("Very Difficult Target 🚨")
 
+                st.warning(
+                        "Your target requires high performance in upcoming semesters, but with dedication and smart planning it is still achievable 🚀"
+                        )
+        
 # ---------------------------------------------------
 # AI GRADE PREDICTOR
 # ---------------------------------------------------
