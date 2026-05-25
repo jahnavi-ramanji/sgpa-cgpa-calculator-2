@@ -414,39 +414,98 @@ elif page == "Target Analyzer":
 
 elif page == "AI Grade Predictor":
 
-    st.header("🤖 AI/ML Grade Predictor")
+    st.header("🧠 AI/ML Grade Predictor")
 
-    sem1 = st.number_input("Semester 1 SGPA", 0.0, 10.0)
-    sem2 = st.number_input("Semester 2 SGPA", 0.0, 10.0)
-    sem3 = st.number_input("Semester 3 SGPA", 0.0, 10.0)
+    st.write("Predict your future SGPA using previous semester performance.")
 
+    # Number of completed semesters
+    num_semesters = st.number_input(
+        "Enter Number of Completed Semesters",
+        min_value=1,
+        max_value=8,
+        step=1
+    )
+
+    sgpa_values = []
+
+    # Dynamic Input Boxes
+    for i in range(int(num_semesters)):
+
+        sgpa = st.number_input(
+            f"Semester {i+1} SGPA",
+            min_value=0.0,
+            max_value=10.0,
+            step=0.01,
+            key=i
+        )
+
+        sgpa_values.append(sgpa)
+
+    # Predict Button
     if st.button("Predict Future SGPA"):
 
-        X = np.array([1, 2, 3]).reshape(-1, 1)
-        y = np.array([sem1, sem2, sem3])
+        # X values
+        X = np.array(
+            range(1, int(num_semesters)+1)
+        ).reshape(-1, 1)
 
+        # Y values
+        y = np.array(sgpa_values)
+
+        # Train Model
         model = LinearRegression()
         model.fit(X, y)
 
-        prediction = model.predict([[4]])
+        # Predict Next Semester
+        next_sem = int(num_semesters) + 1
+
+        prediction = model.predict([[next_sem]])
+
+        predicted_value = round(float(prediction[0]), 2)
+
+        # Prevent values >10
+        if predicted_value > 10:
+            predicted_value = 10
+
+        if predicted_value < 0:
+            predicted_value = 0
 
         st.success(
-            f"Predicted SGPA for Next Semester: {round(prediction[0],2)}"
+            f"Predicted SGPA for Semester {next_sem}: {predicted_value}"
         )
+
+        # Performance Message
+        if predicted_value >= 9:
+            st.success("Outstanding Academic Trend ⭐")
+
+        elif predicted_value >= 8:
+            st.info("Excellent Consistency 🔥")
+
+        elif predicted_value >= 7:
+            st.warning("Good Performance 👍")
+
+        else:
+            st.error("Needs Improvement 📚")
 
         # Graph
-        semesters = [1,2,3,4]
-        values = [sem1, sem2, sem3, prediction[0]]
+        semesters = list(range(1, next_sem + 1))
+
+        graph_values = sgpa_values + [predicted_value]
+
+        df = pd.DataFrame({
+            'Semester': semesters,
+            'SGPA': graph_values
+        })
 
         fig = px.line(
-            x=semesters,
-            y=values,
+            df,
+            x='Semester',
+            y='SGPA',
             markers=True,
-            title="Academic Performance Prediction"
+            title='Academic Performance Prediction'
         )
 
-        st.plotly_chart(fig)
-
+        st.plotly_chart(fig, use_container_width=True)
 # ---------------------------------------------------
 # ANALYTICS DASHBOARD
 # ---------------------------------------------------
