@@ -186,24 +186,43 @@ if page == "Dashboard":
 
     st.header("🎓 Student Dashboard")
 
+    # Current CGPA Calculation
+    if len(st.session_state.sgpa_list) > 0:
+
+        current_cgpa = round(
+            sum(st.session_state.sgpa_list) /
+            len(st.session_state.sgpa_list),
+            2
+        )
+
+        predicted_sgpa = round(current_cgpa + 0.2, 2)
+
+    else:
+
+        current_cgpa = 0
+        predicted_sgpa = 0
+
+    # Credits
+    credits = len(st.session_state.sgpa_list) * 20
+
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.metric("Current CGPA", "8.74")
+        st.metric("Current CGPA", current_cgpa)
 
     with col2:
-        st.metric("Credits Earned", "126")
+        st.metric("Credits Earned", credits)
 
     with col3:
-        st.metric("Predicted SGPA", "9.02")
+        st.metric("Predicted SGPA", predicted_sgpa)
 
     st.markdown("---")
 
     st.subheader("Welcome to BMSCE Academic Portal")
 
-    st.success("Welcome back to the BMSCE Academic Management System")
-
-    
+    st.success(
+        "Welcome back to the BMSCE Academic Management System"
+    )
     
 # ---------------------------------------------------
 # STUDENT DETAILS PAGE
