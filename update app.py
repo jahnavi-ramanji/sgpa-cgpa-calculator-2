@@ -10,7 +10,55 @@ st.set_page_config(
     page_icon="🎓",
     layout="centered"
 )
+# ---------------------------------------------------
+# BMSCE THEME
+# ---------------------------------------------------
 
+st.markdown("""
+<style>
+
+.stApp {
+    background-color: #F5F9FF;
+}
+
+h1 {
+    color: #003366;
+    text-align: center;
+}
+
+h2, h3 {
+    color: #004C99;
+}
+
+.stButton>button {
+    background-color: #0056B3;
+    color: white;
+    border-radius: 10px;
+    height: 45px;
+    width: 100%;
+    font-size: 16px;
+    border: none;
+}
+
+.stButton>button:hover {
+    background-color: #003F7F;
+    color: white;
+}
+
+.stTextInput>div>div>input {
+    border-radius: 8px;
+}
+
+.stNumberInput>div>div>input {
+    border-radius: 8px;
+}
+
+.stSelectbox>div>div {
+    border-radius: 8px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 
 # ---------------------------------------------------
