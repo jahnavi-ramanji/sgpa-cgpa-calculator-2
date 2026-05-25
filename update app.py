@@ -415,5 +415,5 @@ if st.session_state.sgpa_list:
 st.markdown("---")
 
 st.caption(
-    "Developed by Jahnavi R | Department of Aerospace Engineering"
+    "Developed by Jahnavi R | Department of AIML"
 )
