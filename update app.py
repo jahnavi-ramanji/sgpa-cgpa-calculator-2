@@ -17,60 +17,124 @@ import os
 # ---------------------------------------------------
 # PAGE CONFIG
 # ---------------------------------------------------
+# ---------------------------------------------------
+# BMSCE CONTINEO STYLE UI
+# ---------------------------------------------------
 
 st.set_page_config(
-    page_title="BMSCE SGPA & CGPA Portal",
-    layout="wide"
+    page_title="BMSCE Academic Portal",
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
 # ---------------------------------------------------
 # CUSTOM CSS
 # ---------------------------------------------------
 
-st.markdown(
-    """
-    <style>
-    .main {
-        background-color: #0e1117;
-        color: white;
-    }
+st.markdown("""
+<style>
 
-    h1, h2, h3 {
-        color: #00d4ff;
-    }
+/* Main Background */
+.stApp {
+    background-color: #0b1f3a;
+    color: white;
+}
 
-    .stButton>button {
-        background-color: #008CBA;
-        color: white;
-        border-radius: 10px;
-        height: 3em;
-        width: 100%;
-        font-size: 18px;
-    }
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background-color: #13294B;
+}
 
-    .stTextInput>div>div>input {
-        border-radius: 10px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+/* Sidebar Text */
+section[data-testid="stSidebar"] * {
+    color: white;
+}
+
+/* Titles */
+h1, h2, h3 {
+    color: #00C6FF;
+    font-family: Arial;
+}
+
+/* Input Boxes */
+.stTextInput input {
+    background-color: #1f3b64;
+    color: white;
+    border-radius: 10px;
+    border: 1px solid #00C6FF;
+}
+
+.stNumberInput input {
+    background-color: #1f3b64;
+    color: white;
+    border-radius: 10px;
+}
+
+.stSelectbox div {
+    background-color: #1f3b64;
+    color: white;
+    border-radius: 10px;
+}
+
+/* Buttons */
+.stButton > button {
+    width: 100%;
+    background-color: #00C6FF;
+    color: black;
+    border-radius: 10px;
+    height: 45px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+}
+
+/* Metric Cards */
+[data-testid="metric-container"] {
+    background-color: #1f3b64;
+    border-radius: 15px;
+    padding: 15px;
+    border: 1px solid #00C6FF;
+}
+
+/* Tables */
+[data-testid="stDataFrame"] {
+    background-color: white;
+    border-radius: 10px;
+}
+
+/* Footer */
+footer {
+    visibility: hidden;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------------------------------------------
-# TITLE
+# HEADER
 # ---------------------------------------------------
 
-st.title("🎓 BMSCE AI SGPA & CGPA Analytics Portal")
-st.markdown("### Welcome to BMS College Engineering Student Portal")
+col1, col2 = st.columns([1,5])
 
-# ---------------------------------------------------
-# SIDEBAR
-# ---------------------------------------------------
+with col1:
+    st.image("logo.png", width=100)
 
-st.sidebar.title("Navigation")
+with col2:
+    st.markdown(
+        "<h1 style='margin-top:20px;'>BMSCE Academic Analytics Portal</h1>",
+        unsafe_allow_html=True
+    )
+
+st.markdown("---")
+
+st.sidebar.image("logo.png", width=120)
+
+st.sidebar.title("BMSCE Portal")
+
 page = st.sidebar.radio(
-    "Go To",
+    "Navigation",
     [
+        "Dashboard",
         "Student Details",
         "SGPA Calculator",
         "CGPA Calculator",
@@ -104,7 +168,35 @@ grade_map = {
     "C": 5,
     "F": 0
 }
+# ---------------------------------------------------
+# DASHBOARD
+# ---------------------------------------------------
 
+if page == "Dashboard":
+
+    st.header("🎓 Student Dashboard")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric("Current CGPA", "8.74")
+
+    with col2:
+        st.metric("Credits Earned", "126")
+
+    with col3:
+        st.metric("Predicted SGPA", "9.02")
+
+    st.markdown("---")
+
+    st.subheader("Welcome to BMSCE Academic Portal")
+
+    st.info("Use the sidebar to navigate through academic services.")
+
+    st.image(
+        "https://images.unsplash.com/photo-1523050854058-8df90110c9f1",
+        use_container_width=True
+    )
 # ---------------------------------------------------
 # STUDENT DETAILS PAGE
 # ---------------------------------------------------
